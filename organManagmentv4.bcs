@@ -1,0 +1,161 @@
+SCRIPT_NAME = "organstore";
+SCRIPT_OFF = true;
+
+import java.util.*;
+
+String ORGAN;
+
+//change these to the names of your cans (use lowercase)
+String LIVERCAN ="liverher";
+String LUNGCAN = "lungs";
+String KIDNEYCAN = "kids'knees";
+String KIDNEYCAN2 = "kids'knees2";
+
+//change this to the name of you rig (use lowercase)
+String RIG = "dufflebag";
+
+
+
+
+void bootup(){
+//trash organ collection (no-tinge) 
+triggerManager.newTrigger(0,"trashOrgan","No matches for 'tinge'.","$"+SCRIPT_NAME+".trashCollection",true,false,false,null,Font.PLAIN);
+
+//option aelena triggers (comment out if you dont want)
+triggerManager.newTrigger("organFail","but corpse of","familiar consume corpse");
+triggerManager.newTrigger("organFail2",".. but that race has no organs.","familiar consume corpse");
+triggerManager.newTrigger("famFeed","it also manages to find","familiar consume organ");
+
+//dissection triggers
+triggerManager.newTrigger("dissLung","You carefully remove a bloody bodypart 'lung'.","take lung;familiar store rusted blade");
+triggerManager.newTrigger("dissLiver","You carefully remove a bloody bodypart 'liver'.","take liver;familiar store black trance");
+triggerManager.newTrigger("dissKidney","You carefully remove a bloody bodypart 'kidney'.","take kidney;familiar store slow death");
+
+//aelena custom RIP
+triggerManager.newTrigger("aRip","leaving only rotten flesh behind","get all coins,all essence,all shard,all map,all compass;drop crapcoins;dcoin;keep all essence;put all essence in dufflebag");
+
+//can storage triggers
+triggerManager.newTrigger("unusedOrgan","^There is no","$"+SCRIPT_NAME+".organCheck");
+triggerManager.newTrigger("unusedOrgan2","^Your movement prevents you from casting the spell.$","$"+SCRIPT_NAME+".organCheck");
+triggerManager.newTrigger("unusedOrgan3","^You interrupt the spell","$"+SCRIPT_NAME+".organCheck");
+triggerManager.newTrigger("unusedOrgan4","^You interrupt the chant","$"+SCRIPT_NAME+".organCheck");
+triggerManager.newTrigger("unusedOrgan5","^You use your carried organ for the ritual.$","$"+SCRIPT_NAME+".organCheck");
+
+//gags
+triggerManager.newTrigger(0,"gagNoOrgan","^You don't have a reagent for","",true,false,false,null,Font.PLAIN);
+}	
+
+
+void organCheck() {
+
+triggerManager.newTrigger("organType","^[A-z ,'-]*(lung|kidney|liver|lungs|kidneys|livers) of[A-z ,'-]*surrounded by a (yellow|green|cyan|blue|magenta|bright green|red) tinge$","$"+SCRIPT_NAME+".organPlace",true,false,false,null, Font.PLAIN);
+
+clientGUI.doCommand("grep 'tinge' i");
+
+}
+
+void organPlace(){
+
+organString=vars.get(1);
+powerString=vars.get(2); 
+
+
+if (organString.equals("liver")){
+	if(powerString.equals("yellow")|| powerString.equals("green")|| powerString.equals("blue")|| powerString.equals("cyan")){
+		clientGUI.doCommand("familiar store black trance");
+		}else if(powerString.equals("magenta") || powerString.equals("red") || powerString.equals("bright green")){
+		triggerManager.newTrigger("tempStoreOrgan",".. but your (HUGE|big) shiny can is full.$","familiar store black trance");
+		clientGUI.doCommand("gagoutput take "+LIVERCAN+" from "+RIG+";put liver in "+LIVERCAN+";gagoutput put "+LIVERCAN+" in "+RIG+"");
+		}
+}else if (organString.equals("lung")){
+	if(powerString.equals("yellow")|| powerString.equals("green")|| powerString.equals("blue")|| powerString.equals("cyan")){
+		clientGUI.doCommand("familiar store rusted blade");
+		}else if(powerString.equals("magenta") || powerString.equals("red") || powerString.equals("bright green")){
+		triggerManager.newTrigger("tempStoreOrgan",".. but your (HUGE|big) shiny can is full.$","familiar store rusted blade");
+		clientGUI.doCommand("gagoutput take "+LUNGCAN+" from "+RIG+";put lung in "+LUNGCAN+";gagoutput put "+LUNGCAN+" in "+RIG+"");
+		}
+}else {
+	if(powerString.equals("yellow")|| powerString.equals("green")|| powerString.equals("blue")|| powerString.equals("cyan")){
+		triggerManager.newTrigger("tempStoreOrgan",".. but your (HUGE|big) shiny can is full.$","familiar store slow death");
+		clientGUI.doCommand("gagoutput take "+KIDNEYCAN+" from "+RIG+";put kidney in "+KIDNEYCAN+";gagoutput put "+KIDNEYCAN+" in "+RIG+"");
+		}else if(powerString.equals("magenta") || powerString.equals("red") || powerString.equals("bright green")){
+		triggerManager.newTrigger("tempStoreOrgan",".. but your (HUGE|big) shiny can is full.$","familiar store slow death");
+		clientGUI.doCommand("gagoutput take "+KIDNEYCAN2+" from "+RIG+";put kidney in "+KIDNEYCAN2+";gagoutput put "+KIDNEYCAN2+" in "+RIG+"");
+		}
+}
+
+triggerManager.removeTrigger("tempStoreOrgan");
+triggerManager.removeTrigger("organType");
+
+}
+
+void trashCollection(){
+//gags failed storage
+triggerManager.newTrigger("trashOrganGag","You don't have a reagent for","",true,false,false,null, Font.PLAIN);
+
+clientGUI.doCommand("familiar store slow death");
+clientGUI.doCommand("familiar store rusted blade");
+clientGUI.doCommand("familiar store black trance");
+
+triggerManager.removeTrigger("trashOrganGag");
+}
+
+void run() {
+	String check = argument;
+	if( check == null || check.equals("")) {
+		clientGUI.printText("general", "Please choose off, kidney, lung, liver, or consume!\n", "00ffff");
+	} else if ( check.equals("kidney")) {
+		ORGAN="kidney";
+		clientGUI.printText("general", "currently harvesting: " + ORGAN + "\n", "00ffff");
+		triggerManager.newTrigger("fullStore","^You don't have space for the organ.$","familiar consume " + ORGAN + "",true,false,false,null, Font.PLAIN);
+		triggerManager.newTrigger("kidneyOrganHarvest","is DEAD, R.I.P.$","familiar harvest kidney any");
+		triggerManager.newTrigger("kidneyOrganRIP","and harvests a bloody bodypart","$"+SCRIPT_NAME+".organCheck");
+		triggerManager.removeTrigger("lungOrganRIP");
+		triggerManager.removeTrigger("liverOrganRIP");
+		triggerManager.removeTrigger("familiarConsumeRIP");
+		triggerManager.removeTrigger("lungOrganHarvest");
+		triggerManager.removeTrigger("liverOrganHarvest");
+	} else if ( check.equals("lung")) {
+		ORGAN="lung";
+		clientGUI.printText("general", "currently harvesting: " + ORGAN + "\n", "00ffff");
+		triggerManager.newTrigger("fullStore","^You don't have space for the organ.$","familiar consume " + ORGAN + "",true,false,false,null, Font.PLAIN);
+		triggerManager.newTrigger("lungOrganHarvest","is DEAD, R.I.P.$","familiar harvest lung any");
+		triggerManager.newTrigger("lungOrganRIP","and harvests a bloody bodypart","$"+SCRIPT_NAME+".organCheck");
+		triggerManager.removeTrigger("liverOrganRIP");
+		triggerManager.removeTrigger("kidneyOrganRIP");	
+		triggerManager.removeTrigger("familiarConsumeRIP");
+		triggerManager.removeTrigger("kidneyOrganHarvest");
+		triggerManager.removeTrigger("liverOrganHarvest");
+	} else if ( check.equals("liver")) {
+		ORGAN="liver";
+		clientGUI.printText("general", "currently harvesting: " + ORGAN + "\n", "00ffff");
+		triggerManager.newTrigger("fullStore","^You don't have space for the organ.$","familiar consume " + ORGAN + "",true,false,false,null, Font.PLAIN);
+		triggerManager.newTrigger("liverOrganHarvest","is DEAD, R.I.P.$","familiar harvest liver any");
+		triggerManager.newTrigger("liverOrganRIP","and harvests a bloody bodypart","$"+SCRIPT_NAME+".organCheck");
+		triggerManager.removeTrigger("kidneyOrganRIP");	
+		triggerManager.removeTrigger("lungOrganRIP");	
+		triggerManager.removeTrigger("familiarConsumeRIP");	
+		triggerManager.removeTrigger("kidneyOrganHarvest");
+		triggerManager.removeTrigger("lungOrganHarvest");
+	} else if ( check.equals("consume")) {
+		clientGUI.printText("general", "currently CONSUMING corpses!\n", "00ffff");
+		triggerManager.newTrigger("familiarConsumeRIP","is DEAD, R.I.P.$","familiar consume corpse");
+		triggerManager.removeTrigger("kidneyOrganRIP");	
+		triggerManager.removeTrigger("lungOrganRIP");
+		triggerManager.removeTrigger("liverOrganRIP");
+		triggerManager.removeTrigger("kidneyOrganHarvest");
+		triggerManager.removeTrigger("lungOrganHarvest");
+		triggerManager.removeTrigger("liverOrganHarvest");
+	} else if ( check.equals("off")) {
+		clientGUI.doCommand("");
+		triggerManager.removeTrigger("kidneyOrganRIP");	
+		triggerManager.removeTrigger("lungOrganRIP");
+		triggerManager.removeTrigger("liverOrganRIP");	
+		triggerManager.removeTrigger("familiarConsumeRIP");	
+		triggerManager.removeTrigger("kidneyOrganHarvest");
+		triggerManager.removeTrigger("lungOrganHarvest");
+		triggerManager.removeTrigger("liverOrganHarvest");		
+	} else {
+		clientGUI.printText("general", "Please choose off, kidney, lung, liver, or consume!\n", "00ffff");
+	}
+}
