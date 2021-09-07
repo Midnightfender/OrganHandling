@@ -10,7 +10,7 @@ String LIVERCAN ="liverher";
 String LUNGCAN = "lungs";
 String KIDNEYCAN = "kidneyweak";
 String KIDNEYCAN2 = "kidneyaverage";
-String KIDNEYCAN2 = "kidneystrong";
+String KIDNEYCAN3 = "kidneystrong";
 
 //change this to the name of you rig (use lowercase)
 String RIG = "dufflebag";
