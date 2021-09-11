@@ -14,8 +14,11 @@ String KIDNEYCAN3 = "kidneystrong";
 //change this to the name of you rig (use lowercase)
 String RIG = "dufflebag";
 
-//NOTES: red/purple/bright yellow/light green = strong...blue = average....yellow/green = weak
-
+/*NOTES: 
+red/purple/bright_yellow/light_green = strong
+blue/cyan = average
+yellow/green = weak
+*/
 
 void bootup(){
 //trash organ collection (no-tinge) 
@@ -32,7 +35,6 @@ triggerManager.newTrigger("dissLiver","You carefully remove a bloody bodypart 'l
 triggerManager.newTrigger("dissKidney","You carefully remove a bloody bodypart 'kidney'.","take kidney;familiar store slow death");
 
 //can storage triggers
-//triggerManager.newTrigger("unusedOrgan","^There is no","$"+SCRIPT_NAME+".organCheck");
 triggerManager.newTrigger("unusedOrgan2","^Your movement prevents you from casting the spell.$","$"+SCRIPT_NAME+".organCheck");
 triggerManager.newTrigger("unusedOrgan3","^You interrupt the","$"+SCRIPT_NAME+".organCheck");
 triggerManager.newTrigger("unusedOrgan5","^You use your carried organ for the ritual.$","$"+SCRIPT_NAME+".organCheck");
@@ -60,16 +62,18 @@ if (organString.equals("liver")){
 	if(powerString.equals("yellow") || powerString.equals("green") || powerString.equals("blue") || powerString.equals("cyan")){
 		clientGUI.doCommand("familiar store black trance");
 	}else if(powerString.equals("magenta") || powerString.equals("red") || powerString.equals("bright green") || powerString.equals("bright yellow")){
-//		triggerManager.newTrigger("tempStoreOrgan","but your (HUGE|big) shiny can is full.$","familiar store black trance");
-//		clientGUI.doCommand("gagoutput take "+LIVERCAN+" from "+RIG+";put liver in "+LIVERCAN+";gagoutput put "+LIVERCAN+" in "+RIG+"");
+/*These are ommited because I dont have cans for these organs and Im too lazy to make checks.
+		triggerManager.newTrigger("tempStoreOrgan","but your (HUGE|big) shiny can is full.$","familiar store black trance");
+		clientGUI.doCommand("gagoutput take "+LIVERCAN+" from "+RIG+";put liver in "+LIVERCAN+";gagoutput put "+LIVERCAN+" in "+RIG+""); */
 		clientGUI.doCommand("familiar store black trance");
 		}
 }else if (organString.equals("lung")){
 	if(powerString.equals("yellow") || powerString.equals("green") || powerString.equals("blue") || powerString.equals("cyan")){
 		clientGUI.doCommand("familiar store rusted blade");
 	}else if(powerString.equals("magenta") || powerString.equals("red") || powerString.equals("bright green")|| powerString.equals("bright yellow")){
-//		triggerManager.newTrigger("tempStoreOrgan","but your (HUGE|big) shiny can is full.$","familiar store rusted blade");
-//		clientGUI.doCommand("gagoutput take "+LUNGCAN+" from "+RIG+";put lung in "+LUNGCAN+";gagoutput put "+LUNGCAN+" in "+RIG+"");
+/*These are ommited because I dont have cans for these organs and Im too lazy to make checks.
+		triggerManager.newTrigger("tempStoreOrgan","but your (HUGE|big) shiny can is full.$","familiar store rusted blade");
+		clientGUI.doCommand("gagoutput take "+LUNGCAN+" from "+RIG+";put lung in "+LUNGCAN+";gagoutput put "+LUNGCAN+" in "+RIG+""); */
 		clientGUI.doCommand("familiar store rusted blade");
 		}
 }else if (organString.equals("kidney")){
