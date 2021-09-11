@@ -35,9 +35,11 @@ triggerManager.newTrigger("dissLiver","You carefully remove a bloody bodypart 'l
 triggerManager.newTrigger("dissKidney","You carefully remove a bloody bodypart 'kidney'.","take kidney;familiar store slow death");
 
 //can storage triggers
-triggerManager.newTrigger("unusedOrgan2","^Your movement prevents you from casting the spell.$","$"+SCRIPT_NAME+".organCheck");
-triggerManager.newTrigger("unusedOrgan3","^You interrupt the","$"+SCRIPT_NAME+".organCheck");
-triggerManager.newTrigger("unusedOrgan5","^You use your carried organ for the ritual.$","$"+SCRIPT_NAME+".organCheck");
+triggerManager.newTrigger("unusedOrgan1","^Your movement prevents you from casting the spell.$","$"+SCRIPT_NAME+".organCheck");
+triggerManager.newTrigger("unusedOrgan2","^You interrupt the","$"+SCRIPT_NAME+".organCheck");
+triggerManager.newTrigger("unusedOrgan3","^You use your carried organ for the ritual.$","$"+SCRIPT_NAME+".organCheck");
+triggerManager.newTrigger("unusedOrgan4","^You lose your concentration and cannot cast the spell.$","$"+SCRIPT_NAME+".organCheck")
+
 
 //gags
 //triggerManager.newTrigger(0,"gagNoOrgan","^You don't have a reagent for","",true,false,false,null,Font.PLAIN);
