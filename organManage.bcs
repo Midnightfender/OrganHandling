@@ -27,6 +27,7 @@ triggerManager.newTrigger(0,"trashOrgan","No matches for 'tinge'.","$"+SCRIPT_NA
 //option aelena triggers (comment out if you dont want)
 triggerManager.newTrigger("organFail","but corpse of","familiar consume corpse");
 triggerManager.newTrigger("organFail2",".. but that race has no organs.","familiar consume corpse");
+triggerManager.newTrigger("organFail3","does not seem to have","familiar consume corpse");
 triggerManager.newTrigger("famFeed","it also manages to find","familiar consume organ");
 
 //dissection triggers
@@ -38,7 +39,7 @@ triggerManager.newTrigger("dissKidney","You carefully remove a bloody bodypart '
 triggerManager.newTrigger("unusedOrgan1","^Your movement prevents you from casting the spell.$","$"+SCRIPT_NAME+".organCheck");
 triggerManager.newTrigger("unusedOrgan2","^You interrupt the","$"+SCRIPT_NAME+".organCheck");
 triggerManager.newTrigger("unusedOrgan3","^You use your carried organ for the ritual.$","$"+SCRIPT_NAME+".organCheck");
-triggerManager.newTrigger("unusedOrgan4","^You lose your concentration and cannot cast the spell.$","$"+SCRIPT_NAME+".organCheck")
+triggerManager.newTrigger("unusedOrgan4","^You lose your concentration and cannot cast the spell.$","$"+SCRIPT_NAME+".organCheck");
 
 
 //gags
